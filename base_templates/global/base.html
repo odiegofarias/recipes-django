@@ -1,12 +1,20 @@
+{% include 'recipes/partials/head.html' %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receitas para leigos</title>
+    {% include 'recipes/partials/head.html' %}
+    <title>{% block title %}{% endblock title %} | Receitas para leigos</title> 
 </head>
 <body>
-    <h1>Olá, {{ name }}</h1>
+    {% include 'recipes/partials/header.html' %}
+    {% include 'recipes/partials/search.html' %}
+
+    <main class="main-content-container">
+        {% block content %}{% endblock content %}   
+    </main>
+
+    {% include 'recipes/partials/footer.html' %}
 </body>
 </html>
