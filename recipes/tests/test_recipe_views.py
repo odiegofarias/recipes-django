@@ -1,9 +1,9 @@
-from django.test import TestCase
+from .test_recipe_base import RecipeTestBase
 from django.urls import reverse, resolve
 from recipes import views
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTestBase):
     def test_se_a_view_home_de_recipe_esta_correta(self):
         #  resolve: qual função está sendo usada por uma URL
         '''
@@ -58,9 +58,28 @@ class RecipeViewsTest(TestCase):
         response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
 
-    def test_recipe_home_template_mostra_no_recipe_founds_se_nao_tem_receita(self): # noqa: 501
+    # Pode SKIPAR um TEST com @SKIP('WPI')
+    def test_recipe_home_template_mostra_no_recipe_founds_se_nao_tem_receita(self): # noqa: 501      
         response = self.client.get(reverse('recipes:home'))
         self.assertIn(
             'Nenhuma receita para mostrar',
             response.content.decode('utf-8'),
         )
+
+    def test_recipe_home_template_carrega_recipes(self):
+        self.make_recipe(category_data={
+            'name': 'Café da manhã'
+        })
+
+        # executando TEMPLATE
+        response = self.client.get(reverse('recipes:home'))
+        # Pegando conteúdo da página. OLHAR DEBUG
+        content = response.content.decode('utf-8')
+        # Verificando toda a receita, retorna todos os valores do BD, OLHAR DEBUG # noqa: 501
+        response_context_recipes = response.context['recipes']
+        # Verificando se os itens abaixos estão contidos no content
+        self.assertIn('Recipe Title', content)
+        self.assertIn('Café da manhã', content)
+        self.assertEqual(len(response_context_recipes), 1)
+
+        ...
