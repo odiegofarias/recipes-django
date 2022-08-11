@@ -45,15 +45,29 @@ class RecipeModelTest(RecipeTestBase):
 
     #  Testando DEFAULTS no models que mudam a lógica do meu template
     def test_recipe_prepatarion_steps_is_html_e_falso_por_padrao(self):
-        recipe = self.test_make_recipe_no_default()
+        recipe = self.make_recipe_no_default()
         self.assertFalse(
             recipe.preparation_steps_is_html,
             msg='Recipe prepatarion_steps_is_html não é falso',
         )
 
     def test_recipe_is_published_eh_falso_por_padrao(self):
-        recipe = self.test_make_recipe_no_default()
+        recipe = self.make_recipe_no_default()
         self.assertFalse(
             recipe.is_published,
             msg='Recipe is_published não é falso',
         )
+
+    def test_recipe_representacao_de_string(self):
+        needed = 'Testing Representation'
+        self.recipe.title = needed
+        self.recipe.full_clean()
+        self.recipe.save()
+        self.assertEqual(
+            str(self.recipe),
+            needed,
+            msg=f'A representação da string precisa ser igual ao needed: {needed}'  # noqa: 501
+
+        )
+    
+    
