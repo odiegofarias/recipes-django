@@ -82,4 +82,79 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIn('Café da manhã', content)
         self.assertEqual(len(response_context_recipes), 1)
 
-        ...
+    def test_recipe_category_template_carrega_recipes(self):
+        titulo = 'This is a category test'
+        self.make_recipe(title=titulo)
+
+        # executando TEMPLATE
+        response = self.client.get(reverse('recipes:category', args=(1,)))
+        # Pegando conteúdo da página. OLHAR DEBUG
+        content = response.content.decode('utf-8')
+        # Verificando toda a receita, retorna todos os valores do BD, OLHAR DEBUG # noqa: 501
+        #  response_context_recipes = response.context['recipes']
+        # Verificando se os itens abaixos estão contidos no content
+        self.assertIn(titulo, content)
+
+    def test_recipe_detalhes_template_carrega_recipe_correta(self):
+        titulo = 'This is a detail page - Carrega uma receita'
+        self.make_recipe(title=titulo)
+
+        # executando TEMPLATE
+        response = self.client.get(
+            reverse(
+                'recipes:recipe',
+                kwargs={
+                    'id': 1
+                },
+            )
+        )
+        # Pegando conteúdo da página. OLHAR DEBUG
+        content = response.content.decode('utf-8')
+        # Verificando toda a receita, retorna todos os valores do BD, OLHAR DEBUG # noqa: 501
+        #  response_context_recipes = response.context['recipes']
+        # Verificando se os itens abaixos estão contidos no content
+        self.assertIn(titulo, content)
+
+    def test_recipe_home_template_nao_carrega_recipes_nao_publicadas(self):
+        self.make_recipe(is_published=False)
+
+        # executando TEMPLATE
+        response = self.client.get(reverse('recipes:home'))
+
+        self.assertIn(
+            'Nenhuma receita para mostrar',
+            response.content.decode('utf-8'),
+        )
+
+    def test_recipe_category_template_nao_carrega_recipes_nao_publicadas(self):
+        #  Pegando o CATEGORY.ID da recipe
+        recipe = self.make_recipe(is_published=False)
+
+        # executando TEMPLATE
+        response = self.client.get(
+            reverse(
+                'recipes:category',
+                kwargs={
+                    'category_id': recipe.category.id,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_recipe_detalhes_template_nao_carrega_recipe_nao_publicada(self):
+        #  Pegando o CATEGORY.ID da recipe
+        recipe = self.make_recipe(is_published=False)
+
+        # executando TEMPLATE
+        response = self.client.get(
+            reverse(
+                'recipes:recipe',
+                kwargs={
+                    'id': recipe.id,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 404)
+
