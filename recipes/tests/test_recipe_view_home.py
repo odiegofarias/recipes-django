@@ -70,7 +70,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         response = self.client.get(reverse('recipes:home'))
         recipes = response.context['recipes']
         paginator = recipes.paginator
-       
+
         #  Pegando o número de páginas
         self.assertEqual(paginator.num_pages, 3)
         #  Acessando cada página e verificando o números de recipes
