@@ -15,7 +15,7 @@ def add_placeholder(field, placeholder_val):
 
 def strong_password(password):
     regex = re.compile(r'(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
- 
+
     if not regex.match(password):
         raise ValidationError(
             'Password must have at least one uppercase letter, '
@@ -32,26 +32,26 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['email'], 'Your e-mail')
         add_placeholder(self.fields['first_name'], 'Ex.: Diego')
         add_placeholder(self.fields['last_name'], 'Ex.: Fernandes')
+        add_placeholder(self.fields['password'], 'Your password')
+        add_placeholder(self.fields['password2'], 'Repeat your password')
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Your password'
-        }),
+        widget=forms.PasswordInput(),
         error_messages={
             'required': 'Password must not be empty'
         },
         label='Senha',
-        # help_text=(
-        #     '* Password precisa ter uma letra maiúscula'
-        # ),
-        validators=[strong_password]
+        validators=[strong_password],
+        help_text=(
+            'Password must have at least one uppercase letter, '
+            'one lowercase letter and one number. The length should be '
+            'at least 8 characters'
+        ),
     )
     password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Repita sua senha'
-        }),
+        widget=forms.PasswordInput(),
         label='Repita a senha',
     )
 
@@ -64,49 +64,9 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
-
-        # labels = {
-        #     'first_name': 'Primeiro nome',
-        #     'last_name': 'Último nome',
-        #     'username': 'Usuário',
-        #     'email': 'E-mail',
-        #     'password': 'Senha',
-        # }
-
-        # widgets = {
-        #     'username': forms.TextInput(attrs={
-        #         'placeholder': 'Digite seu usuário'
-        #     }),
-        #     'password': forms.PasswordInput(attrs={
-        #         'placeholder': 'Digite seu password'
-        #     })
-        # }
-
-    #  Validação de campo "CLEAN_FIELD"
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'atenção' in data:
-            raise ValidationError(
-                'Não digite %(pipoca)s no campo password',
-                code='invalid',
-                params={'pipoca': '"atenção"'}
-            )
-
-        return data
-
-        #  Validação de campo
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
-
-        if 'Jhon Wick' in data:
-            raise ValidationError(
-                'Não digite %(value)s no campo password',
-                code='invalid',
-                params={'value': '"Jhon Wick"'}
-            )
-
-        return data
+        help_texts = {
+            'email': 'The email must be valid.',
+        }
 
     # Verificando se um campo é igual ao outro
     def clean(self):
@@ -129,3 +89,31 @@ class RegisterForm(forms.ModelForm):
                     # Letras maiúsculas e minusculas e etc
                 ]
             })
+
+    # #  Validação de campo "CLEAN_FIELD"
+    # def clean_password(self):
+    #     data = self.cleaned_data.get('password')
+
+    #     if 'atenção' in data:
+    #         raise ValidationError(
+    #             'Não digite %(value)s no campo password',
+    #             code='invalid',
+    #             params={'value': '"atenção"'}
+    #         )
+
+    #     return data
+
+    #     #  Validação de campo
+    # def clean_first_name(self):
+    #     data = self.cleaned_data.get('first_name')
+
+    #     if 'Jhon Wick' in data:
+    #         raise ValidationError(
+    #             'Não digite %(value)s no campo first_name',
+    #             code='invalid',
+    #             params={'value': '"Jhon Wick"'}
+    #         )
+
+    #     return data
+
+    
