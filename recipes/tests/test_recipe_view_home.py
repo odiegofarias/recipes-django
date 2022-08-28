@@ -77,3 +77,28 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertEqual(len(paginator.get_page(1)), 3)
         self.assertEqual(len(paginator.get_page(2)), 3)
         self.assertEqual(len(paginator.get_page(3)), 2)
+
+    def test_page_query_invalida_usa_page_um(self):
+        """
+            Criando 8 receitas e com o gerenciador de contexto,
+            colocando 3 receitas por página
+            caso, teremos 3 páginas ao todo.
+        """
+        for i in range(8):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            self.make_recipe(**kwargs)
+
+        with patch('recipes.views.PER_PAGE', new=3):
+            response = self.client.get(reverse('recipes:home') + '?page=1A')
+
+            # Chamando um valor inválido(1A), ele deve mandar para página 1
+            self.assertEqual(
+                response.context['recipes'].number,
+                1
+            )
+            #  Mandando um valor correto, ele manda para a página específica
+            response = self.client.get(reverse('recipes:home') + '?page=2')
+            self.assertEqual(
+                response.context['recipes'].number,
+                2
+            )

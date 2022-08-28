@@ -35,12 +35,38 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['password'], 'Your password')
         add_placeholder(self.fields['password2'], 'Repeat your password')
 
-    password = forms.CharField(
-        required=True,
-        widget=forms.PasswordInput(),
+    first_name = forms.CharField(
+        error_messages={'required': 'Write your first name'},
+        label='Primeiro nome'
+    )
+    last_name = forms.CharField(
+        error_messages={'required': 'Write your last name'},
+        label='Último nome'
+    )
+
+    username = forms.CharField(
         error_messages={
-            'required': 'Password must not be empty'
+            'required': 'This field must not be empty.',
+            'min_length': 'Username must have at least 4 characters',
+            'max_length': 'Username must be a maximum of 50 characters'
         },
+        help_text=(
+            'Username must have letters, numbers or one of those @/./+/-/_ '
+            'The length should be between 4 and 50 characters'
+        ),
+        label='Usuário',
+        min_length=4, max_length=50,
+    )
+
+    email = forms.EmailField(
+        error_messages={'required': 'E-mail is required.'},
+        help_text='The email must be valid.',
+        label='E-mail',
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(),
+        error_messages={'required': 'Password must not be empty.'},
         label='Senha',
         validators=[strong_password],
         help_text=(
@@ -50,9 +76,9 @@ class RegisterForm(forms.ModelForm):
         ),
     )
     password2 = forms.CharField(
-        required=True,
         widget=forms.PasswordInput(),
         label='Repita a senha',
+        error_messages={'required': 'Please, repeat your password.'},
     )
 
     class Meta:
@@ -64,9 +90,18 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
-        help_texts = {
-            'email': 'The email must be valid.',
-        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            raise ValidationError(
+                'User e-mail is alreadt in use',
+                code='invalid',
+            )
+
+        return email
 
     # Verificando se um campo é igual ao outro
     def clean(self):
@@ -115,5 +150,3 @@ class RegisterForm(forms.ModelForm):
     #         )
 
     #     return data
-
-    

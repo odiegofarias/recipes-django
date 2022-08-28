@@ -23,9 +23,12 @@ def register_create(request):
 
     if form.is_valid():
         # Se quiser continuar salvando informações:
-        # data = form.save(commit=False)
-        form.save()
+        user = form.save(commit=False)
+        #  Criptografando senha
+        user.set_password(user.password)
+        user.save()
         messages.success(request, 'Your user is created, please log in.')
+
         del (request.session['register_form_data'])
 
     return redirect('authors:register')
