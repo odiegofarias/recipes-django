@@ -308,6 +308,10 @@ a {
     text-align: center;
 }
 
+.left {
+    text-align: left;
+}
+
 .pagination-content{
     display: flex;
     flex-flow: row wrap;
@@ -350,7 +354,9 @@ a {
     color: var(--color-error-dark)
 }
 
-.form-content input {
+.form-content input,
+.form-content textarea,
+.form-content select{
     width: 100%;
     padding: 1rem;
     border-radius: .4rem;
@@ -373,6 +379,10 @@ a {
 
 .inline-form {
     display: inline;
+}
+
+.span-2 {
+    grid-column: span 2;
 }
 
 .plaintext-button {
