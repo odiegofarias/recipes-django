@@ -123,7 +123,7 @@ def dashboard_recipe_edit(request, id):
         #  Agora, o form é válido e eu posso tentar salvar
         recipe = form.save(commit=False)
 
-        # Passando todas as informações que o usuário não editou como hard coded
+        # Passando todas as informações que o usuário não editou como hard coded # noqa: E501
         recipe.author = request.user
         recipe.preparation_steps_is_html = False
         recipe.is_published = False
