@@ -312,6 +312,28 @@ a {
     text-align: left;
 }
 
+.right {
+    text-align: right;
+    transition: transform 250ms linear;
+}
+
+.create-recipe {
+    text-decoration: none;
+    padding: calc(var(--spacing-gutter-medium)/2.8);
+    font-size: 16px;
+    background-color: var(--color-primary);
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0px #000;
+    text-align: right;
+    
+    
+}
+.right:hover {
+    transform: scale(1.02);
+}
+
+
 .pagination-content{
     display: flex;
     flex-flow: row wrap;
