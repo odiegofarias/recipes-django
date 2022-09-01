@@ -147,23 +147,22 @@ def create_recipe(request):
         data=request.POST or None,
         files=request.FILES or None
     )
-    
-    if form.is_valid():
-        recipe = form.save(commit=False)
-        recipe.author = request.user
-        recipe.preparation_steps_is_html = False
-        recipe.is_published = False
+    if request.POST:
+        if form.is_valid():
+            form.save(commit=False)
+            form.author = request.user
+            form.preparation_steps_is_html = False
+            form.is_published = False
 
-        recipe.save()
+            form.save()
 
-        messages.success(request, 'Receita criada com sucesso')
-        return redirect(reverse('authors:dashboard'))
+            messages.success(request, 'Receita criada com sucesso')
+            return redirect(reverse('authors:dashboard'))
 
     return render(
         request,
         'authors/pages/create_recipe.html',
         {
             'form': form,
-            'recipe': recipe,
         }
     )
