@@ -149,12 +149,12 @@ def create_recipe(request):
     )
     if request.POST:
         if form.is_valid():
-            form.save(commit=False)
-            form.author = request.user
-            form.preparation_steps_is_html = False
-            form.is_published = False
+            new_recipe = form.save(commit=False)
+            new_recipe.author = request.user
+            new_recipe.preparation_steps_is_html = False
+            new_recipe.is_published = False
 
-            form.save()
+            new_recipe.save()
 
             messages.success(request, 'Receita criada com sucesso')
             return redirect(reverse('authors:dashboard'))

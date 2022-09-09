@@ -8,9 +8,9 @@
         <h2>Dashboard ({{ user }})</h2>
         {% include 'authors/partials/login_message.html' %}
         <div class="authors-dashboard-container">
-            <div class="right">
-                <a href="{% url 'authors:create_recipe' %}" class="create-recipe">New Recipe</a>
-            </div>
+                <div class="right">
+                    <a href="{% url 'authors:create_recipe' %}" class="create-recipe">New Recipe</a>
+                </div>
             <h3>Your Recipes</h3>
             <ul>
                 {% for recipe in recipes %}
