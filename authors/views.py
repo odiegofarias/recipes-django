@@ -142,14 +142,16 @@ def dashboard_recipe_edit(request, id):
 
 
 @login_required(login_url='authors:login', redirect_field_name='next')
-def create_recipe(request):
+def dashboard_recipe_new(request):
     form = AuthorRecipeForm(
         data=request.POST or None,
         files=request.FILES or None
     )
+
     if request.POST:
         if form.is_valid():
             new_recipe = form.save(commit=False)
+
             new_recipe.author = request.user
             new_recipe.preparation_steps_is_html = False
             new_recipe.is_published = False
@@ -157,12 +159,38 @@ def create_recipe(request):
             new_recipe.save()
 
             messages.success(request, 'Receita criada com sucesso')
-            return redirect(reverse('authors:dashboard'))
+            return redirect(reverse('authors:dashboard', args=(new_recipe.id,)))  # noqa: E501
 
     return render(
         request,
-        'authors/pages/create_recipe.html',
+        'authors/pages/dashboard_recipe_new.html',
         {
             'form': form,
+            'form_action': reverse('authors:dashboard_recipe_new'),
         }
     )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_delete(request):
+    if not request.POST:
+        raise Http404()
+
+    POST = request.POST
+    id = POST.get('id')
+
+    recipe = Recipe.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+    #  O filter retorna um QuerySet. Logo, precisamos
+    #  colocar .first() para retornar o primeiro encontrado
+
+    if not recipe:
+        raise Http404()
+
+    recipe.delete()
+    messages.success(request, 'Receita apagada com sucesso')
+
+    return redirect(reverse('authors:dashboard'))
