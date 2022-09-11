@@ -159,14 +159,13 @@ def dashboard_recipe_new(request):
             new_recipe.save()
 
             messages.success(request, 'Receita criada com sucesso')
-            return redirect(reverse('authors:dashboard', args=(new_recipe.id,)))  # noqa: E501
+            return redirect(reverse('authors:dashboard'))  # noqa: E501
 
     return render(
         request,
         'authors/pages/dashboard_recipe_new.html',
         {
             'form': form,
-            'form_action': reverse('authors:dashboard_recipe_new'),
         }
     )
 

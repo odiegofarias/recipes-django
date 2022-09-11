@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
+import uuid
 
 
 class Migration(migrations.Migration):
@@ -21,6 +22,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='slug',
-            field=models.SlugField(unique=True),
+            field=models.SlugField(unique=True, default=uuid.uuid1),
         ),
     ]
