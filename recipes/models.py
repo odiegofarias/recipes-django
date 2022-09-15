@@ -1,7 +1,7 @@
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -17,7 +17,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
-    slug = models.SlugField(unique=True, default=uuid.uuid1)
+    slug = models.SlugField(unique=True)
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=65)
     servings = models.IntegerField()
@@ -38,13 +38,15 @@ class Recipe(models.Model):
         blank=True, default=None,
     )
 
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        if is_new:
-            super(Recipe, self).save()
-            self.slug = '%s-%i' % (slugify(self.title), self.id)
-
-        super(Recipe, self).save(*args, **kwargs)
-
     def __str__(self) -> str:
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('recipes:recipe', args=(self.id,))
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = f'{slugify(self.title)}'
+            self.slug = slug
+
+        return super().save(*args, **kwargs)

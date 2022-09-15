@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .forms import RegisterForm, LoginForm, AuthorRecipeForm
+from authors.forms import RegisterForm, LoginForm
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -89,7 +89,7 @@ def dashboard(request):
     recipes = Recipe.objects.filter(
         is_published=False,
         author=request.user,
-    )
+    ).order_by('-id')
     return render(
         request,
         'authors/pages/dashboard.html',
@@ -98,98 +98,26 @@ def dashboard(request):
         })
 
 
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_edit(request, id):
-    recipe = Recipe.objects.filter(
-        is_published=False,
-        author=request.user,
-        pk=id,
-    ).first()
-    #  O filter retorna um QuerySet. Logo, precisamos
-    #  colocar .first() para retornar o primeiro encontrado
+# @login_required(login_url='authors:login', redirect_field_name='next')
+# def dashboard_recipe_delete(request):
+#     if not request.POST:
+#         raise Http404()
 
-    if not recipe:
-        raise Http404()
+#     POST = request.POST
+#     id = POST.get('id')
 
-    form = AuthorRecipeForm(
-        #  Bound Form(Quando tem dados) or None
-        data=request.POST or None,
-        files=request.FILES or None,
-        #  Vinculado ao recipe
-        instance=recipe,
-    )
+#     recipe = Recipe.objects.filter(
+#         is_published=False,
+#         author=request.user,
+#         pk=id,
+#     ).first()
+#     #  O filter retorna um QuerySet. Logo, precisamos
+#     #  colocar .first() para retornar o primeiro encontrado
 
-    if form.is_valid():
-        #  Agora, o form é válido e eu posso tentar salvar
-        recipe = form.save(commit=False)
+#     if not recipe:
+#         raise Http404()
 
-        # Passando todas as informações que o usuário não editou como hard coded # noqa: E501
-        recipe.author = request.user
-        recipe.preparation_steps_is_html = False
-        recipe.is_published = False
+#     recipe.delete()
+#     messages.success(request, 'Receita apagada com sucesso')
 
-        recipe.save()
-
-        messages.success(request, 'Sua receita foi salva com sucesso!')
-        return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
-
-    return render(
-        request,
-        'authors/pages/dashboard_recipe.html',
-        {
-            'form': form
-        })
-
-
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_new(request):
-    form = AuthorRecipeForm(
-        data=request.POST or None,
-        files=request.FILES or None
-    )
-
-    if request.POST:
-        if form.is_valid():
-            new_recipe = form.save(commit=False)
-
-            new_recipe.author = request.user
-            new_recipe.preparation_steps_is_html = False
-            new_recipe.is_published = False
-
-            new_recipe.save()
-
-            messages.success(request, 'Receita criada com sucesso')
-            return redirect(reverse('authors:dashboard'))  # noqa: E501
-
-    return render(
-        request,
-        'authors/pages/dashboard_recipe_new.html',
-        {
-            'form': form,
-        }
-    )
-
-
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_delete(request):
-    if not request.POST:
-        raise Http404()
-
-    POST = request.POST
-    id = POST.get('id')
-
-    recipe = Recipe.objects.filter(
-        is_published=False,
-        author=request.user,
-        pk=id,
-    ).first()
-    #  O filter retorna um QuerySet. Logo, precisamos
-    #  colocar .first() para retornar o primeiro encontrado
-
-    if not recipe:
-        raise Http404()
-
-    recipe.delete()
-    messages.success(request, 'Receita apagada com sucesso')
-
-    return redirect(reverse('authors:dashboard'))
+#     return redirect(reverse('authors:dashboard'))
