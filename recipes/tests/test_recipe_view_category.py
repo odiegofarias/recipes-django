@@ -10,7 +10,7 @@ class RecipeCategoryViewTest(RecipeTestBase):
                 'recipes:category', kwargs={'category_id': 1}
             )
         )
-        self.assertIs(view.func, views.category)
+        self.assertIs(view.func.view_class, views.RecipeListViewCategory)
 
     def test_recipe_category_view_retorna_status_code_404_se_nao_encontrou_recipes(self): # noqa: 501
         response = self.client.get(
