@@ -2,6 +2,8 @@ from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.db.models import F, Value
+from django.db.models.functions import Concat
 
 
 class Category(models.Model):
@@ -14,7 +16,24 @@ class Category(models.Model):
         return self.name
 
 
+#  Criando um manager para retornar as receitas publicadas
+#  No caso, estou acrescentando um método ao objects
+#  e concatenar first e last name para gerar full name
+class RecipeManager(models.Manager):
+    def get_published(self):
+        return self.filter(
+            is_published=True,
+        ).annotate(
+            author_full_name=Concat(
+                F('author__first_name'), Value(' '),
+                F('author__last_name'), Value(' ('),
+                F('author__username'), Value(')'),
+            )
+        )
+
+
 class Recipe(models.Model):
+    objects = RecipeManager()
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
     slug = models.SlugField(unique=True)

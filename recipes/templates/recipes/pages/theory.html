@@ -7,6 +7,14 @@
     <title>Document</title>
 </head>
 <body>
+    <p>Quantidade total de receitas: {{ number_of_recipes }}</p>
     <h1>Theory</h1>
+    <ul>
+    {% for recipe in recipes  %}
+        <li>ID: {{ recipe.id }}  {{ recipe.author_full_name }}  Título: {{ recipe.title }}</li>
+    {% empty %}
+        <p>No recipes found</p>
+    {% endfor %}
+    </ul>
 </body>
 </html>

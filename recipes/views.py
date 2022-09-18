@@ -1,12 +1,13 @@
 import os
 from recipes.models import Recipe
 from django.http import Http404
-from django.db.models import Q
 from utils.pagination import make_pagination
 from django.views.generic import ListView, DetailView
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.forms.models import model_to_dict
+#  from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Count
 
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -14,10 +15,69 @@ PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
 def theory(request, *args, **kwargs):
     #         Model   Manager  Método
-    recipes = Recipe.objects.all()
-    print(recipes[2:3])
+    # recipes = Recipe.objects.all()
+    # #  Filter retorna uma queryset. O first retorna apenas 1 recipe
+    # recipes = recipes.filter(title__icontains='receita').first()
+
+    #  Se não existir, ele levanta uma exceção DoesNotExist
+    # try:
+    #     recipes = Recipe.objects.get(id=10000)
+    # except ObjectDoesNotExist:
+    #     recipes = None
+
+    # Recipe.objects.all()
+
+    # #  Pega um específico
+    # Recipe.objects.get()
+
+    # # Retorna um objeto do model, não tem como filtrar após isso
+    # Recipe.objects.filter().first()
+    # Recipe.objects.filter().last()
+
+    #  Operador OR
+    """
+        recipes = Recipe.objects.filter(
+            Q(
+                Q(
+                    title__icontains='receita',
+                    id__gt=2,
+                    is_published=True,
+                ) |
+                Q(
+                    title__icontains='pão',
+                )
+            )
+        )[:30]
+    """
+
+    #  F sempre para referenciar o campo. Estou tentando pegar uma receita com o mesmo ID do author # noqa: E501
+    """
+        recipes = Recipe.objects.filter(
+            id=F('author__id')
+        )[:20]
+    """
+
+    #  Pesquisando com valores específicos para ser mais rapido
+    """
+        recipes = Recipe.objects.values(
+            'id', 'author__username', 'title',
+        )[:20]
+    """
+
+    #  Perigoso. Prestar atenção nos campos que vou usar. Pode ser DEFER
+    # recipes = Recipe.objects.only('id', 'title')
+
+    #  Agregadores, Max, MIN, COUNT, MÈDIA
+    # recipes = Recipe.objects.values('id', 'title').filter(title__icontains='receita')  # noqa: E501
+
+    # Juntando nome e sobrenome e acrescentando carac com Value  ANNOTATE
+    recipes = Recipe.objects.get_published()
+    number_of_recipes = recipes.aggregate(number=Count('id'))
+
     context = {
-        'recipes': recipes
+        'recipes': recipes,
+        # Retorna um dicionário. Com isso, preciso pegar o field
+        'number_of_recipes': number_of_recipes['number'],
     }
 
     return render(
