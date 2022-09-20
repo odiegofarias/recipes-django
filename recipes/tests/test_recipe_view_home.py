@@ -60,7 +60,7 @@ class RecipeHomeViewTest(RecipeTestBase):
             response.content.decode('utf-8'),
         )
 
-    @patch('recipes.views.PER_PAGE', new=3)
+    @patch('recipes.views.site.PER_PAGE', new=3)
     def test_recipe_home_eh_paginado(self):
         for i in range(8):
             kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
@@ -88,7 +88,7 @@ class RecipeHomeViewTest(RecipeTestBase):
             kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
             self.make_recipe(**kwargs)
 
-        with patch('recipes.views.PER_PAGE', new=3):
+        with patch('recipes.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('recipes:home') + '?page=1A')
 
             # Chamando um valor inválido(1A), ele deve mandar para página 1

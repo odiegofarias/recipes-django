@@ -30,4 +30,3 @@ def recipe_cover_update(sender, instance, *args, **kwargs):
 
     if is_new_cover:
         delete_cover(old_instance)
-
