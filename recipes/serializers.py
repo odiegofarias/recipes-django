@@ -28,6 +28,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             'tags_names',
             'tag_links',
         ]
+
     public = serializers.BooleanField(
         source='is_published',
         read_only=True,
@@ -57,3 +58,29 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_preparation(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
+
+    # Utilizado quando precisamos validar um campo específico
+    def validate_title(self, value):
+        title = value
+
+        if len(title) < 5:
+            raise serializers.ValidationError('O título precisa ter mais de 5 caracteres')  # noqa: E501
+
+        return title
+
+    # Utilizado quando precisamos do valor de mais um campo
+    def validate(self, attrs):
+        super_validate = super().validate(attrs)
+
+        title = attrs.get('title')
+        description = attrs.get('description')
+
+        if title == description:
+            raise serializers.ValidationError(
+                {
+                    "title": ["Posso", "Ter", "Mais de um erro"],
+                    "description": ["Posso", "Ter", "Mais de um erro"]
+                }
+            )
+
+        return super_validate
