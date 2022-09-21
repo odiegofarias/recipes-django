@@ -2,6 +2,7 @@ from rest_framework import serializers
 # from django.contrib.auth.models import User
 from tag.models import Tag
 from .models import Recipe
+from authors.validators import AuthorRecipeValidator
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -27,6 +28,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             'tags',
             'tags_names',
             'tag_links',
+            'servings',
+            'preparation_time',
+            'preparation_time_unit',
+            'servings_unit',
         ]
 
     public = serializers.BooleanField(
@@ -59,28 +64,12 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_preparation(self, recipe):
         return f'{recipe.preparation_time} {recipe.preparation_time_unit}'
 
-    # Utilizado quando precisamos validar um campo específico
-    def validate_title(self, value):
-        title = value
-
-        if len(title) < 5:
-            raise serializers.ValidationError('O título precisa ter mais de 5 caracteres')  # noqa: E501
-
-        return title
-
     # Utilizado quando precisamos do valor de mais um campo
     def validate(self, attrs):
         super_validate = super().validate(attrs)
-
-        title = attrs.get('title')
-        description = attrs.get('description')
-
-        if title == description:
-            raise serializers.ValidationError(
-                {
-                    "title": ["Posso", "Ter", "Mais de um erro"],
-                    "description": ["Posso", "Ter", "Mais de um erro"]
-                }
-            )
+        AuthorRecipeValidator(
+            data=attrs,
+            ErrorClass=serializers.ValidationError,
+        )
 
         return super_validate
