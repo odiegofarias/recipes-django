@@ -21,9 +21,15 @@ def recipe_api_list(request):
 
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = RecipeSerializer(data=request.data)
+        serializer = RecipeSerializer(
+            data=request.data,
+            context={'request': request},
+        )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(
+            author_id=1, category_id=1,
+            tags=[1, 2],
+        )
 
         return Response(
             serializer.data,
@@ -31,21 +37,38 @@ def recipe_api_list(request):
         )
 
 
-@api_view()
+@api_view(http_method_names=['get', 'patch', 'delete'])
 def recipe_api_detail(request, pk):
     recipe = get_object_or_404(
         Recipe.objects.get_published(),
         pk=pk,
     )
-    serializer = RecipeSerializer(
-        instance=recipe,
-        many=False,
-        context={'request': request}
-    )
+    if request.method == 'GET':
+        serializer = RecipeSerializer(
+            instance=recipe,
+            many=False,
+            context={'request': request}
+        )
+        return Response(serializer.data)
     #  Sempre que mandar uma queryset, precisa colocar "many=True"
     # serializer = RecipeSerializer(instance=recipe, many=False)
+    elif request.method == 'PATCH':
+        serializer = RecipeSerializer(
+            instance=recipe,
+            data=request.data,
+            many=False,
+            context={'request': request},
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    return Response(serializer.data)
+        return Response(
+            serializer.data,
+        )
+    elif request.method == 'DELETE':
+        recipe.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view()
