@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from tag.models import Tag
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -18,6 +18,7 @@ class RecipeAPIv2List(ListCreateAPIView):
     queryset = Recipe.objects.get_published()
     serializer_class = RecipeSerializer
     pagination_class = RecipeAPIv2Pagination
+
     # def get(self, request):
     #     recipes = Recipe.objects.get_published()[:10]
     #     #  Sempre que mandar uma queryset, precisa colocar "many=True"
@@ -46,44 +47,48 @@ class RecipeAPIv2List(ListCreateAPIView):
     #     )
 
 
-class RecipeApiv2Detail(APIView):
-    def get_recipe(self, pk):
-        recipe = get_object_or_404(
-            Recipe.objects.get_published(),
-            pk=pk,
-        )
+class RecipeApiv2Detail(RetrieveUpdateDestroyAPIView):
+    queryset = Recipe.objects.get_published()
+    serializer_class = RecipeSerializer
+    pagination_class = RecipeAPIv2Pagination
 
-        return recipe
+    # def get_recipe(self, pk):
+    #     recipe = get_object_or_404(
+    #         Recipe.objects.get_published(),
+    #         pk=pk,
+    #     )
 
-    def get(self, request, pk):
-        recipe = self.get_recipe(pk=pk)
-        serializer = RecipeSerializer(
-            instance=recipe,
-            many=False,
-            context={'request': request},
-        )
-        return Response(serializer.data)
+    #     return recipe
 
-    def patch(self, request, pk):
-        recipe = self.get_recipe(pk=pk)
-        serializer = RecipeSerializer(
-            instance=recipe,
-            data=request.data,
-            many=False,
-            context={'request': request},
-            partial=True,
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+    # def get(self, request, pk):
+    #     recipe = self.get_recipe(pk=pk)
+    #     serializer = RecipeSerializer(
+    #         instance=recipe,
+    #         many=False,
+    #         context={'request': request},
+    #     )
+    #     return Response(serializer.data)
 
-        return Response(
-            serializer.data
-        )
+    # def patch(self, request, pk):
+    #     recipe = self.get_recipe(pk=pk)
+    #     serializer = RecipeSerializer(
+    #         instance=recipe,
+    #         data=request.data,
+    #         many=False,
+    #         context={'request': request},
+    #         partial=True,
+    #     )
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
 
-    def delete(self, request, pk):
-        recipe = self.get_recipe(pk=pk)
-        recipe.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    #     return Response(
+    #         serializer.data
+    #     )
+
+    # def delete(self, request, pk):
+    #     recipe = self.get_recipe(pk=pk)
+    #     recipe.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view()
