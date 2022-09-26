@@ -25,6 +25,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             'category',
             'public',
             'preparation',
+            'preparation_steps',
             'tags',
             'tags_names',
             'tag_links',
