@@ -5,9 +5,6 @@ from ..serializers import RecipeSerializer, TagSerializer
 from django.shortcuts import get_object_or_404
 from tag.models import Tag
 
-from rest_framework.generics import (
-    ListCreateAPIView, RetrieveUpdateDestroyAPIView
-)
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 
