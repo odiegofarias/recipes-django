@@ -1,9 +1,12 @@
 from django.urls import path
 from . import views
+from rest_framework.routers import SimpleRouter
 
 # recipes:recipe
 app_name = 'authors'
 
+author_api_router = SimpleRouter()
+author_api_router.register('api', views.AuthorViewSet, basename='author-api')
 
 #  URLS "dinâmicas" ficam abaixo das estáticas
 urlpatterns = [
@@ -34,3 +37,6 @@ urlpatterns = [
         name='profile'
     ),
 ]
+
+
+urlpatterns += author_api_router.urls
