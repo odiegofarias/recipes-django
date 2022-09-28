@@ -33,6 +33,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             'preparation_time',
             'preparation_time_unit',
             'servings_unit',
+            'cover',
         ]
 
     public = serializers.BooleanField(
