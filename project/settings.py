@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get('DEBUG') == '1' else False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://recipes-django-production.up.railway.app/', '127.0.0.1']
 
 # Application definition
 
@@ -185,3 +185,7 @@ SIMPLE_JWT = {
     'SIGNING_KEY': os.environ.get('SECRET_KEY_JWT', 'INSECURE'),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+CSRF_TRUSTED_ORIGINS = ['https://recipes-django-production.up.railway.app/' ,'https://*.127.0.0.1']
+
