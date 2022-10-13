@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get('DEBUG') == '1' else False
 
-ALLOWED_HOSTS = ['https://recipes-django-production.up.railway.app/', '127.0.0.1']
+ALLOWED_HOSTS = ['recipes-django-production.up.railway.app/', '127.0.0.1']
 
 # Application definition
 
