@@ -1,11 +1,24 @@
 # Blog de receitas
 
-<h4>Sobre</h4>
+## Sobre
 <p>Este projeto foi criado no Curso de Django do Professor Luíz Otávio da Udemy.</p>
 <p>
-  O projeto basicamente é um 'blog' onde as pessoas podem adicionar e compartilhar suas receitas com os demais usuários
-  
+  O projeto é um 'blog' onde as pessoas podem adicionar e compartilhar suas receitas com as demais.
 </p>
+### Modo se uso
+  <p>
+    A pessoa não precisa estar logada para visualizar as receitas, mas precisa para publicar uma receita.
+    Ao criar a conta e adicionar uma receita ao sistema, ela ficará em "stand-by" aguardando a administração liberar o conteúdo. Após criada, a receita não é publica imediatamente, com isso, a pessoa pode editar ou excluir a sua receita.
+  Entretanto, após publicação pela administração, a receita se torna permanente, não podendo ser editada ou excluida pela pessoa criadora, apenas pela administração.
+  </p>
+
+## Tecnologias
+  <ul>
+    <li>Django</li>
+    <li>HTML/CSS</li>
+    <li>Potsgresql</li>
+    <li>Javascript</li>
+  </ul>
 
 ## Instalação
 
