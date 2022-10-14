@@ -5,7 +5,7 @@
 <p>
   O projeto é um 'blog' onde as pessoas podem adicionar e compartilhar suas receitas com as demais.
 </p>
-## Modo se uso
+<h3>Modo de uso</h3>
   <p>
     A pessoa não precisa estar logada para visualizar as receitas, mas precisa para publicar uma receita.
     Ao criar a conta e adicionar uma receita ao sistema, ela ficará em "stand-by" aguardando a administração liberar o conteúdo. Após criada, a receita não é publica imediatamente, com isso, a pessoa pode editar ou excluir a sua receita.
