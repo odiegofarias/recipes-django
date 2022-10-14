@@ -17,6 +17,7 @@
             <span class="recipe-author-item">
                 {% if recipe.author.profile %}
                     <a href="{% url 'authors:profile' recipe.author.profile.id %}">
+                       
                 {% endif %}
                 
                 <i class="fas fa-user"></i>
@@ -25,8 +26,9 @@
                         {{recipe.author.first_name}} {{recipe.author.last_name}}
                     {% else %}
                         {{ recipe.author.username }}
+                        
                     {% endif %}
-
+            <a href="http://instagram.com/diegofarias00" target="_blank">@diegofarias00</a>   
                 {% if recipe.author.profile %}
                     </a>
                 {% endif %}
