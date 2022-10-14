@@ -24,11 +24,12 @@
 
                     {% if recipe.author.first_name %}
                         {{recipe.author.first_name}} {{recipe.author.last_name}}
+
                     {% else %}
                         {{ recipe.author.username }}
-                        
+                        <p><a href="http://instagram.com/diegofarias00" target="_blank">Instagram</a> </p>
                     {% endif %}
-            <a href="http://instagram.com/diegofarias00" target="_blank">@diegofarias00</a>   
+                      
                 {% if recipe.author.profile %}
                     </a>
                 {% endif %}
