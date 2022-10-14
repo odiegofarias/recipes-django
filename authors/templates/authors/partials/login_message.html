@@ -1,7 +1,7 @@
 {% if request.user.is_authenticated %}
     <div class="login-message">Você está logado como  {{ user.username }}.
-        <a href="{% url 'authors:dashboard' %}">See your recipes</a>.
+        <a href="{% url 'authors:dashboard' %}">Veja suas receitas</a>.
         {% include 'authors/partials/form_logout.html' %}
-        <a class="authors-logout-link" href="#"> Click here</a> to logout.
+        <a class="authors-logout-link" href="#"> Clique aqui</a> para fazer logout.
     </div>
 {% endif %}

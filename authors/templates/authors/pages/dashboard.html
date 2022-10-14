@@ -9,9 +9,9 @@
         {% include 'authors/partials/login_message.html' %}
         <div class="authors-dashboard-container">
                 <div class="right">
-                    <a href="{% url 'authors:dashboard_recipe_new' %}" class="create-recipe">New Recipe</a>
+                    <a href="{% url 'authors:dashboard_recipe_new' %}" class="create-recipe">Adicionar receita</a>
                 </div>
-            <h3>Your Recipes</h3>
+            <h3>Sua receitas</h3>
             <ul>
                 {% for recipe in recipes %}
                     <li>
@@ -24,7 +24,7 @@
                     </li>
                     {% empty %}
                     <li>
-                        <p>You do not have recipes, please create one.</p>
+                        <p>Você ainda não posssui receitas. Por favor, crie uma.</p>
                     </li>
                 {% endfor %}
             </ul>

@@ -26,6 +26,16 @@ class AuthorRecipeForm(forms.ModelForm):
             'preparation_steps',
             'cover',
         )
+        labels = {
+            'title': 'Título',
+            'description': 'Descrição',
+            'preparation_time': 'Tempo de preparo',
+            'preparation_time_unit': 'Unidade de tempo de preparo',
+            'servings': 'Porções',
+            'servings_unit': 'Unidade de porções',
+            'preparation_steps': 'Modo de preparo',
+            'cover': 'Imagem de Capa',
+        }
 
         widgets = {
             'cover': forms.FileInput(
