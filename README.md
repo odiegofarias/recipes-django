@@ -1,5 +1,12 @@
 # Blog de receitas
 
+<h4>Sobre</h4>
+<p>Este projeto foi criado no Curso de Django do Professor Luíz Otávio da Udemy.</p>
+<p>
+  O projeto basicamente é um 'blog' onde as pessoas podem adicionar e compartilhar suas receitas com os demais usuários
+  
+</p>
+
 ## Instalação
 
 Primeiro passo é clonar o repositório:
