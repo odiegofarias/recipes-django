@@ -9,5 +9,3 @@ class Profile(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='', blank=True)
 
-    def __str__(self) -> str:
-        return self.author
